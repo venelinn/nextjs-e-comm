@@ -1,6 +1,6 @@
 {
-  "name": "do-charge-me",
-  "version": "0.5.0",
+  "name": "e-comm",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "clean": "rm -rf .next",
