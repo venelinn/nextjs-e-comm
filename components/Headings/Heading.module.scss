@@ -1,0 +1,52 @@
+@use "styles/typo-mixins" as typo;
+
+.heading {
+  &--normal {
+    --heading-weight: var(--font-regular);
+  }
+  &--bold {
+    --heading-weight: var(--font-bold);
+  }
+  &--uppercase {
+    --heading-case: uppercase;
+  }
+}
+
+.heading--h1 {
+	@include typo.h1;
+}
+
+.heading--h2 {
+	@include typo.h2;
+}
+
+.heading--h3 {
+	@include typo.h3;
+}
+
+.heading--h4 {
+	@include typo.h4;
+	--heading-weight: var(--font-medium);
+}
+
+.heading--hero {
+	--heading-size: calc(16px + 9vw);
+}
+
+.heading--base {
+	--heading-size: var(--font-base);
+	--heading-weight:  var(--font-black);
+	--heading-line-height: 24px;
+}
+
+.heading--center {
+	--heading-align: center;
+}
+
+.heading--highlight {
+	--heading-justify-self: center;
+	width: fit-content;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	background-image: linear-gradient(90deg, #fff 20%, red);
+}

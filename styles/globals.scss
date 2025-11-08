@@ -1,0 +1,225 @@
+@use "base-variables" as base;
+@use "mixins" as shared;
+@use "typo-mixins" as typo;
+@use "normalize" as normalize;
+@use "typography";
+@use "css-variables";
+@use "layout" as layout;
+
+@layer frameworks, reset, base, theme, layouts, components, utilities;
+
+@layer base {
+	@include layout.content;
+  @include normalize.styles;
+}
+
+@layer theme {
+  @include typography.typography;
+}
+
+@layer utilities {
+  @import "tailwindcss/theme.css";
+  @import "tailwindcss/utilities.css";
+}
+
+
+:root {
+	--swiper-navigation-color: var(--color-blue);
+	--swiper-pagination-color: var(--color-blue);
+
+  --body-font-family: 'Poppins', 'Poppins Fallback';
+	--page-max-width: 1120px;
+	--padding-desktop: 1.5rem;
+  --padding-mobile: 1rem;
+
+	--link-line-space: 3px;
+
+	// Animations
+	--anim-line-speed: 300ms;
+  --anim-line: cubic-bezier(0.42, 0.63, 0.13, 0.99);
+	--ease-in: cubic-bezier(0.43, 0.045, 0.1, 0.95);
+	--text-in: cubic-bezier(.31,.11,.12,.99);
+}
+
+/* Document
+========================================================================== */
+html {
+	-moz-osx-font-smoothing: grayscale;
+	-ms-overflow-style: scrollbar;
+	-ms-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: rgba(var(--color-ocean), 0.15);
+	-webkit-text-size-adjust: 100%;
+	margin: 0;
+	padding: 0;
+  scroll-padding-top: var(--navigation-height);
+	color-scheme: light dark;
+	@media (prefers-reduced-motion: no-preference) {
+		scroll-behavior: smooth;
+	}
+}
+
+body {
+	@include typo.ui-body;
+	color-scheme: dark;
+	color: CanvasText;
+	margin: 0;
+	background-color: transparent;
+	background-image: url("/static/bg.png");
+	&:before {
+		content: "";
+		background-color: #18222c99;
+		animation: darker 10s infinite ease-in-out both;
+		position: fixed;
+		inset: 0;
+		isolation: isolate;
+		z-index: -1;
+	}
+}
+
+@keyframes hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(100deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+@keyframes darker {
+  0% {
+    filter: brightness(0);
+  }
+  50% {
+    filter: brightness(0.5);
+  }
+  100% {
+    filter: brightness(0);
+  }
+}
+
+#__next {
+	align-items: stretch;
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	> header {
+		flex: 0 0 auto;
+	}
+	&:has(.page > section:first-child[data-full="true"]) {
+		.page > section:first-child {
+			--_section-padding-top: 0;
+		}
+		[data-header] {
+			// --_header-bgr: rgba(0,0,0, 0.2);
+			backdrop-filter: blur(10px);
+		}
+
+	}
+}
+
+.content-grid {
+	> section:first-of-type {
+		--_section-padding-top: calc(var(--navigation-height) + 2rem);
+	}
+}
+/* ==========================================================================
+    Global
+========================================================================== */
+
+@layer utilities {
+	.brand-text {
+		fill: #fff;
+	}
+	.brand-color {
+		fill: var(--color-highlight);
+	}
+
+	.rel {
+		position: relative;
+	}
+
+	.u-visuallyHidden {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+		overflow: hidden;
+		width: 1px;
+		height: 1px;
+	}
+
+	.u-overflow--hidden {
+		overflow: hidden;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
+	}
+
+	.hidden-visible {
+		visibility: hidden;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	small {
+		@include typo.ui-small;
+	}
+}
+
+
+// LINK
+.link {
+	--line-space: var(--link-line-space);
+  display: inline-flex;
+	color: var(--link-color, var(--color-sapphire));
+  &__text {
+		padding-bottom: var(--line-space);
+   //  @include linkHover();
+  }
+  &--active {
+    &:not(:hover) {
+      .link__text {
+        &:before {
+          --link-width: 100%;
+        }
+      }
+    }
+    @media (any-hover: hover) {
+      &:hover {
+        .link__text {
+          &:before {
+            // @include link-hover-anim;
+          }
+        }
+      }
+    }
+  }
+}
+@keyframes activeLink {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+
+// logo

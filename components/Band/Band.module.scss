@@ -1,0 +1,10 @@
+@use "styles/base-variables" as base;
+
+.band {
+  @media (min-width: base.$breakpoint-min-md) {
+    display: flex;
+  }
+  @media (max-width: base.$breakpoint-max-md) {
+    display: grid;
+  }
+}

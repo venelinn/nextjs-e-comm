@@ -1,0 +1,198 @@
+/* ==========================================================================
+    Button
+========================================================================== */
+
+.btn {
+  --btn-padding-t: 0.8rem;
+  --btn-padding-b: 0.8rem;
+  --btn-padding-l: var(--spacing-6);
+  --btn-padding-r: var(--spacing-6);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  outline: none;
+  background-color: var(--btn-bg-color);
+  border: 1px solid var(--btn-border-color);
+  color: var(--btn-color, inherit);
+  font-weight: var(--btn-font-weight, var(--font-weight-medium));
+  padding: var(--btn-padding-t) var(--btn-padding-r) var(--btn-padding-b) var(--btn-padding-l);
+  border-radius: var(--btn-border-radius, calc(var(--border-radius) * 3));
+  min-width: var(--btn-min-width);
+  font-family: inherit;
+  font-size: var(--btn-font-size, var(--ui-body-font-size));
+  flex-direction: var(--btn-flex-direction);
+  cursor: pointer;
+  text-decoration: none;
+  line-height: var(--btn-line-height, 1);
+  &.icon-only {
+    --btn-padding-l: 0.5rem;
+    --btn-padding-r: 0.5rem;
+    &.is-rounded {
+      --btn-border-radius: 44px;
+    }
+  }
+  &.is-rounded {
+    // --btn-border-radius: 44px;
+  }
+  &--icon-left {
+    --btn-padding-l: 0.5rem;
+  }
+  // &--icon-right {
+  // 	--btn-padding-r: .5rem;
+  // }
+  @media (prefers-reduced-motion: no-preference) {
+    transition: color 0.6s var(--ease-in), border 0.3s var(--ease-in);
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background-color: var(--btn-hover-bg-color);
+    width: 10%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    inset: 0;
+    margin: auto;
+    opacity: 0;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 400ms, opacity 1000ms;
+    }
+  }
+  .icon {
+    opacity: 0.7;
+    scale: var(--_icon-scale, 1.2);
+  }
+
+  &:is(:hover, :focus-visible) {
+    --btn-color: var(--btn-hover-color);
+    --btn-border-color: var(--btn-hover-border-color);
+    &::before {
+      transform: scale(20);
+      opacity: 1;
+      @media (prefers-reduced-motion: no-preference) {
+        transition: transform 1000ms, opacity 400ms;
+      }
+    }
+  }
+
+  &:is(:disabled, .is-disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+  }
+
+  &--sm {
+    --btn-padding-t: 0.5rem;
+    --btn-padding-b: 0.5rem;
+    --btn-font-size: var(--ui-small-font-size);
+    --btn-min-width: auto;
+    --btn-font-weight: var(--font-weight-normal);
+    --_icon-scale: 1.4;
+  }
+
+  // primary → Blue (Update / Apply)
+  // success → Green (Create / Add New)
+  // toggle → Gray/Blue (Toggles)
+  // request → Purple/Blue (Requests)
+  // danger → Red (Delete)
+  // warning / attention → Orange/Yellow (Resolve Conflicts / Take Action)
+
+  &--primary {
+    --btn-color: var(--system-white);
+    --btn-bg-color: var(--color-blue);
+    --btn-border-color: var(--color-blue);
+    --btn-hover-bg-color: color-mix(in srgb, var(--color-blue), black 10%);
+    --btn-hover-border-color: var(--color-blue);
+    --btn-hover-color: var(--color-white);
+    &.is-outlined {
+      --btn-bg-color: var(--color-shade-100);
+      --btn-border-color: var(--color-white);
+      --btn-hover-bg-color: var(--color-white);
+      --btn-hover-border-color: var(--color-white);
+      --btn-hover-color: var(--color-black);
+    }
+  }
+
+  &--secondary {
+    --btn-color: var(--color-blue);
+    --btn-bg-color: var(--color-white);
+    --btn-border-color: var(--color-white);
+    --btn-hover-bg-color: var(--color-blue);
+    --btn-hover-border-color: var(--color-blue);
+    --btn-hover-color: var(--color-white);
+    &.is-outlined {
+      --btn-color: var(--color-green);
+      --btn-bg-color: var(--color-shade-100);
+      --btn-border-color: var(--color-green);
+      --btn-hover-bg-color: var(--color-green);
+      --btn-hover-border-color: var(--color-green);
+      --btn-hover-color: var(--color-shade-100);
+      &:hover {
+        --btn-color: var(--color-shade-100);
+      }
+    }
+  }
+
+  &--danger {
+    --btn-color: var(--color-white);
+    --btn-bg-color: var(--system-error);
+    // --btn-border-color: hsl(from var(--color-green) h s calc(l - 10));
+    --btn-border-color: var(--system-error);
+    --btn-hover-bg-color: var(--color-shade-100);
+    --btn-hover-border-color: var(--system-error);
+    --btn-hover-color: var(--system-error);
+    &.is-outlined {
+      --btn-color: var(--system-error);
+      --btn-bg-color: var(--color-shade-100);
+      --btn-border-color: var(--system-error);
+      --btn-hover-bg-color: var(--system-error);
+      --btn-hover-border-color: var(--system-error);
+      --btn-hover-color: var(--color-shade-100);
+      &:hover {
+        --btn-color: var(--color-shade-100);
+      }
+    }
+  }
+
+  &--toggle {
+    --btn-color: var(--color-white);
+    --btn-bg-color: var(--color-shade-55);
+    --btn-border-color: var(--color-shade-100);
+    --btn-hover-bg-color: var(--color-blue);
+    --btn-hover-border-color: var(--color-blue);
+    --btn-hover-color: var(--color-white);
+    &.is-outlined {
+      --btn-color: var(--color-shade-10);
+      --btn-bg-color: var(--color-shade-100);
+      --btn-border-color: var(--color-shade-55);
+      --btn-hover-bg-color: var(--color-shade-55);
+      --btn-hover-border-color: var(--color-shade-55);
+      --btn-hover-color: var(--color-shade-100);
+      &:hover {
+        --btn-color: var(--color-shade-100);
+        --btn-hover-bg-color: var(--color-shade-20);
+        --btn-hover-border-color: var(--color-shade-20);
+      }
+    }
+  }
+
+  &--link {
+    --btn-bg-color: var(--color-shade-100);
+    --btn-border-color: transparent;
+    --btn-min-width: auto;
+    --btn-hover-bg-color: transparent;
+    --btn-hover-border-color: var(--color-shade-55);
+    --btn-hover-color: var(--color-shade-0);
+    &.is-outlined {
+      --btn-border-color: var(--color-shade-85);
+      &:hover {
+        --btn-border-color: var(--color-shade-55);
+      }
+    }
+  }
+}

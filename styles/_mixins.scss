@@ -1,0 +1,187 @@
+@mixin resetList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+@mixin sr-only {
+	position: absolute;
+	z-index: -1;
+
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+
+	border: 0;
+
+	clip: rect(0, 0, 0, 0);
+	color: #000000;
+	background: #ffffff;
+}
+
+
+@mixin closeButton {
+	--close-size: 36px;
+	position: var(--_close-position, absolute);
+	color: var(--_close-color, inherit);
+	right: 1rem;
+	top: .5rem;
+	z-index: 1;
+	width: var(--close-size);
+	height: var(--close-size);
+	border-radius: 50%;
+	border: 2px solid currentColor;
+	background-color: transparent;
+
+	&:before,
+	&:after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 65%;
+		height: 3px;
+		@media (prefers-reduced-motion: no-preference) {
+			background: currentColor;
+			transition: all 0.35s var(--ease-in);
+		}
+		@media (prefers-reduced-motion: reduce) {
+			background: currentColor;
+		}
+	}
+
+	&:before {
+		transform: translate3d(-50%, -50%, 0) rotate(-45deg);
+	}
+
+	&:after {
+		transform: translate3d(-50%, -50%, 0) rotate(45deg);
+	}
+	&:hover {
+		@media (prefers-reduced-motion: no-preference) {
+			&:before {
+				transform: translate3d(-50%, -50%, 0) rotate(45deg);
+			}
+
+			&:after {
+				transform: translate3d(-50%, -50%, 0) rotate(-45deg);
+			}
+		}
+		@media (prefers-reduced-motion: reduce) {
+			color: currentColor;
+		}
+	}
+}
+
+/* ==========================================================================
+    Tools / Mixins / Typography
+========================================================================== */
+
+/**
+ * Generates a converted font-size into REM
+ * @param font-size in pixel
+ */
+
+@mixin chevron($size: "lg") {
+	z-index: 0;
+	width: var(--chevron-size);
+	height: var(--chevron-size);
+
+	display: block;
+	-webkit-font-smoothing: antialiased;
+
+	&::before,
+	&::after {
+		position: absolute;
+		top: 50%;
+		left: 0;
+
+		height: 1px;
+
+		background-color: currentColor;
+		backface-visibility: hidden;
+		opacity: 0.9;
+		@media (prefers-reduced-motion: no-preference) {
+			transition-duration: 0.2s;
+			transition-property: transform, background;
+		}
+
+		content: "";
+	}
+
+	&::before {
+		border-top-left-radius: 1px;
+		border-bottom-left-radius: 1px;
+		transform: rotate(45deg);
+	}
+
+	&::after {
+		border-top-right-radius: 1px;
+		border-bottom-right-radius: 1px;
+		transform: rotate(-45deg);
+	}
+
+	@if $size == "md" {
+		--chevron-size: 14px;
+		&::before,
+		&::after {
+			width: 9px;
+		}
+
+		&::after {
+			margin-left: 5px;
+		}
+	}
+	@if $size == "lg" {
+		--chevron-size: 24px;
+
+		&::before,
+		&::after {
+			width: 14px;
+		}
+
+		&::after {
+			margin-left: 10px;
+		}
+	}
+}
+
+@mixin chevron-active {
+	&::before {
+		transform: rotate(-45deg);
+	}
+
+	&::after {
+		transform: rotate(45deg);
+	}
+}
+
+@mixin ellipsis($width: false) {
+	@if $width {
+		width: $width;
+	}
+
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+@mixin truncate($lines: 2) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $lines;
+	overflow: hidden;
+	word-break: break-word;
+}
+
+@mixin card-clickable-base {
+	&:after {
+		position: absolute;
+		inset-block: 0;
+		inset-inline: 0;
+		cursor: pointer;
+		content: "";
+	}
+}

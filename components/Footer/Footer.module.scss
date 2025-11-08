@@ -1,0 +1,49 @@
+@use "styles/base-variables" as base;
+@use "styles/typo-mixins" as typo;
+
+.footer {
+	display: flex;
+	justify-content: var(--_footer-justify, center);
+	&:has(.footer__nav) {
+		--_footer-justify: space-between;
+	}
+	&__fineprint {
+		@include typo.ui-small;
+		a {
+			color: inherit;
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+.link {
+	span {
+		line-height: 1.2;
+		&:before {
+			--link-line-color: var(--color-highlight);
+			top: calc(100% - 8px);
+			@media (max-width: base.$breakpoint-max-md) {
+				[lang="fr"] & {
+					top: calc(100% - 1rem);
+				}
+			}
+		}
+	}
+	&__active {
+		--link-line: 3px;
+		font-weight: var(--font-black);
+		span:before {
+			border-bottom-color: var(--color-highlight);
+		}
+	}
+}
+
+// <Section> classes
+.main {
+	--section-min-height: auto;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	flex: 0 0 auto;
+}

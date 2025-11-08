@@ -1,0 +1,40 @@
+{
+	"border-radius": {
+		"value": "8px"
+	},
+	"page-width": {
+		"value": "1600px"
+	},
+	"box-shadow": {
+		"color": {
+			"value": "rgba(56, 65, 74, 0.15)"
+		},
+		"size": {
+			"value": "0 1px 2px"
+		},
+		"base": {
+			"value": "{box-shadow.size.value} {box-shadow.color.value}"
+		}
+	},
+	"padding": {
+		"desktop": {
+			"value": "1rem"
+		},
+		"mobile": {
+			"value": "0.5rem"
+		}
+	},
+	"animation": {
+		"line-speed": {
+			"value": "300ms"
+		},
+		"line": {
+			"value": "cubic-bezier(0.42, 0.63, 0.13, 0.99)"
+		}
+	},
+	"nav": {
+		"width": {
+			"value": "250px"
+		}
+	}
+}
