@@ -8,7 +8,7 @@ dotenv.config()
 
 const managementToken =
 	process.env.CONTENTFUL_MANAGEMENT_TOKEN || process.argv[2]
-const spaceId = "mk2ob1cvcoea"
+const spaceId = process.env.CONTENTFUL_SPACE_ID || process.argv[3]
 
 if (!managementToken || !spaceId) {
 	console.error(
