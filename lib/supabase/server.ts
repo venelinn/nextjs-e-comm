@@ -1,26 +1,24 @@
+// lib/supabase/server.ts
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-/**
- * Especially important if using Fluid compute: Don't put this client in a
- * global variable. Always create a new client within each function when using
- * it.
- */
-export async function createClient() {
-  const cookieStore = await cookies();
-
+export function createServerClientInstance(req: NextApiRequest, res: NextApiResponse) {
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, {
     cookies: {
-      getAll() {
-        return cookieStore.getAll();
+      get(name) {
+        return req.cookies[name];
       },
-      setAll(cookiesToSet) {
-        try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
-        } catch {
-          // The `setAll` method was called from a Server Component.
-          // This can be ignored if you have middleware refreshing
-          // user sessions.
+      set(name, value, options) {
+        if (res) {
+          const cookie = `${name}=${value}; Path=/; HttpOnly; SameSite=Lax; ${
+            options?.maxAge ? `Max-Age=${options.maxAge};` : ""
+          }`;
+          res.setHeader("Set-Cookie", cookie);
+        }
+      },
+      remove(name) {
+        if (res) {
+          res.setHeader("Set-Cookie", `${name}=; Path=/; Max-Age=0`);
         }
       },
     },
