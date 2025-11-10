@@ -2,10 +2,8 @@
 
 import cx from "clsx";
 import Link from "next/link";
-import { AuthButton } from "@/components/Auth/auth-button"; // ✅ stays server side
 import Logo from "@/components/Icons/Logo";
 import { createClient } from "@/lib/supabase/server";
-import { hasEnvVars } from "@/lib/utils";
 import styles from "./Navigation.module.scss";
 import { NavigationInner } from "./NavigationInner";
 
