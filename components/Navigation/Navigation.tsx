@@ -4,7 +4,8 @@ import cx from "clsx";
 import Link from "next/link";
 import { AuthButton } from "@/components/Auth/auth-button"; // ✅ stays server side
 import Logo from "@/components/Icons/Logo";
-import { hasEnvVars } from "@/lib/utils"; // helper for env check
+import { createClient } from "@/lib/supabase/server";
+import { hasEnvVars } from "@/lib/utils";
 import styles from "./Navigation.module.scss";
 import { NavigationInner } from "./NavigationInner";
 
@@ -30,7 +31,11 @@ export default async function Navigation({
   isLogoVisible,
 }: NavigationProps) {
   const headerText = siteConfig?.headerText;
-  console.log("siteConfig", siteConfig);
+  // You can also use getUser() which will be slower.
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+
+  const user = data?.claims;
   // const hasEnvVars = getEnvVarsStatus();
 
   return (
@@ -59,9 +64,8 @@ export default async function Navigation({
           siteConfig={siteConfig}
           links={links}
           isNavigationVisible={isNavigationVisible}
-          // hasEnvVars={hasEnvVars}
+          isLogin={user}
         />
-        {hasEnvVars && <AuthButton />}
       </div>
     </header>
   );

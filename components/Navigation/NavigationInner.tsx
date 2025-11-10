@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { EnvVarWarning } from "@/components/Auth/env-var-warning";
+import { LogoutButton } from "@/components/Auth/logout-button";
 import useNavigationContext from "../../context/navigationContext";
 import useElementSize from "../../hooks/useElementSize";
 import Button from "../Button/Button";
@@ -24,16 +25,10 @@ type NavigationInnerProps = {
   siteConfig?: any;
   links: NavLink[];
   isNavigationVisible?: boolean;
-  hasEnvVars?: boolean;
+  isLogin?: any;
 };
 
-export function NavigationInner({
-  pageLocale,
-  siteConfig,
-  links,
-  isNavigationVisible,
-  hasEnvVars,
-}: NavigationInnerProps) {
+export function NavigationInner({ pageLocale, siteConfig, links, isNavigationVisible, isLogin }: NavigationInnerProps) {
   const { setRef, sticky, stuck, fixed, isOpen, toggle } = (useNavigationContext() as any) || {};
   const [navigationRef, { height }]: any = useElementSize() as any;
   const pathname = usePathname();
@@ -82,21 +77,20 @@ export function NavigationInner({
             })}
           </div>
         )}
-
-        <div className={styles.navigation__social}>
-          {siteConfig?.requestQuote && (
-            <Button
-              variant="primary"
-              outlined
-              href={siteConfig.requestQuote.url}
-              label={siteConfig.requestQuote.name}
-            />
-          )}
-          <LocaleSwitcher pageLocale={pageLocale} isOpen={isOpen} />
-        </div>
-
-        {isNavigationVisible !== false && <Hamburger isOpen={isOpen} toggle={toggle} />}
       </div>
+      <div className={styles.navigation__social}>
+        {isLogin ? (
+          <LogoutButton />
+        ) : (
+          <>
+            <Button href="/auth/login" size="sm" variant="primary" label="Sign in" />
+            <Button href="/auth/sign-up" size="sm" variant="primary" outlined label="Sign up" />
+          </>
+        )}
+        <LocaleSwitcher pageLocale={pageLocale} isOpen={isOpen} />
+      </div>
+
+      {isNavigationVisible !== false && <Hamburger isOpen={isOpen} toggle={toggle} />}
     </>
   );
 }

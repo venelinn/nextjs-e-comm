@@ -25,6 +25,7 @@ type FooterProps = {
 export default function Footer({ siteConfig, links = [], pageLocale }: FooterProps) {
   const pathname = usePathname(); // ✅ replaces router.asPath
   const locale = pageLocale?.split("-")[0] ?? "en";
+  const footerText = siteConfig?.footer;
 
   return (
     <Section
@@ -35,7 +36,7 @@ export default function Footer({ siteConfig, links = [], pageLocale }: FooterPro
       <div className={styles.footer}>
         <div className={styles.footer__fineprint}>
           <span>
-            &copy; {new Date().getFullYear()} {siteConfig?.copyright} {siteConfig?.fineprint}
+            &copy; {new Date().getFullYear()} {footerText?.copyright} {footerText?.fineprint}
           </span>
         </div>
         {Array.isArray(links) && links.length > 0 && (
