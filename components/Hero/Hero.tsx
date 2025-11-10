@@ -1,3 +1,4 @@
+"use client";
 import gsap from "gsap";
 import Image from "next/image";
 import type React from "react";
@@ -32,34 +33,6 @@ const heroAnimation = (animationID: string) => {
     rotateX: 20,
     transformOrigin: "center bottom",
   });
-
-  timeline
-    .from(sectionSelector, {
-      duration: 1.5,
-      opacity: 0,
-      delay: 0.5,
-      scale: 1.1,
-      ease: "power4.out",
-    })
-    .from("header", { opacity: 0, duration: 1, delay: 1 }, "-=1")
-    .from(
-      heroContentSelector,
-      {
-        opacity: 0,
-        duration: 1,
-        ease: "power4.out",
-      },
-      "-=0.5",
-    )
-    .from(
-      heroImage,
-      {
-        opacity: 0,
-        duration: 1,
-        ease: "power4.out",
-      },
-      "-=0.5",
-    );
 
   gsap.to(heroImage, {
     yPercent: 0,

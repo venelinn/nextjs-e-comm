@@ -1,10 +1,7 @@
+"use client";
 import cx from "clsx";
-import gsap from "gsap";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useRef } from "react";
-import useIsomorphicLayoutEffect from "../../hooks/useIsomorphicLayoutEffect";
-import useReduceMotion from "../../hooks/useReduceMotion";
+import { usePathname } from "next/navigation";
 import { Section } from "../Section";
 import styles from "./Footer.module.scss";
 
@@ -26,30 +23,8 @@ type FooterProps = {
 };
 
 export default function Footer({ siteConfig, links = [], pageLocale }: FooterProps) {
-  const reduceMotion = useReduceMotion();
-  const router = useRouter();
-  const element = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname(); // ✅ replaces router.asPath
   const locale = pageLocale?.split("-")[0] ?? "en";
-
-  useIsomorphicLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!reduceMotion && element.current) {
-        const opts: any = {
-          opacity: 0,
-          delay: 1,
-          duration: 1.5,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: element.current,
-            start: "-100% bottom",
-            end: "top top",
-          },
-        };
-        gsap.from(element.current as any, opts);
-      }
-    }, element);
-    return () => ctx.revert();
-  }, [router.asPath, reduceMotion]);
 
   return (
     <Section
@@ -57,7 +32,7 @@ export default function Footer({ siteConfig, links = [], pageLocale }: FooterPro
         main: styles.main,
       }}
     >
-      <div className={styles.footer} ref={element}>
+      <div className={styles.footer}>
         <div className={styles.footer__fineprint}>
           <span>
             &copy; {new Date().getFullYear()} {siteConfig?.copyright} {siteConfig?.fineprint}
@@ -66,7 +41,7 @@ export default function Footer({ siteConfig, links = [], pageLocale }: FooterPro
         {Array.isArray(links) && links.length > 0 && (
           <div className={styles.footer__nav}>
             {links.map((link) => {
-              const isActive = router.asPath === link.slug;
+              const isActive = pathname === link.slug;
               return (
                 <Link
                   key={link.slug}
