@@ -13,9 +13,7 @@ const BandConnector = (props) => {
       itemsPerRow={props.itemsPerRow || 1}
       items={members.map((item) => ({
         id: item.id,
-        content: (
-          <PrimaryCard image={item.image[0]} content={item.content} heading={item.heading} locale={props.locale} />
-        ),
+        content: <PrimaryCard id={item.id} image={item.image[0]} content={item.content} heading={item.heading} />,
       }))}
     />
   );

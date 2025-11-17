@@ -9,6 +9,7 @@ const client = createClient({
   host: "cdn.contentful.com",
 });
 
+// Utility function to safely determine the Contentful locale and fetch entries
 async function getEntries(
   content_type: string,
   queryParams: { locale: string; [key: string]: any },
@@ -16,13 +17,28 @@ async function getEntries(
   const { locale } = queryParams;
 
   let contentfulLocale: string;
+  // 1. Check if the provided locale is a direct Contentful locale
   if (localization.contentfulLocales.includes(locale)) {
     contentfulLocale = locale;
   } else {
+    // 2. Try to derive the Contentful locale, or fall back to the first defined locale
     contentfulLocale = getContentfulLocale?.(locale) || localization.contentfulLocales[0];
   }
 
+  // Ensure contentfulLocale is always a string and not null/undefined
+  if (!contentfulLocale) {
+    console.error("No valid contentful locale found or defaulted.");
+    return { items: [], total: 0, skip: 0, limit: 0, sys: {} as any };
+  }
+
+  // *** DEBUG LOG: Show the locale being used for the request ***
+  if (content_type === "customLinks") {
+    console.log(`Contentful Debug: Requesting ${content_type} with determined locale: ${contentfulLocale}`);
+  }
+  // ***************************************************************
+
   const params = { ...queryParams, locale: contentfulLocale };
+  // Include 10 to resolve nested references
   return await client.getEntries({ content_type, ...params, include: 10 });
 }
 
@@ -132,7 +148,13 @@ function mapEntry(entry: any, localePassed?: string) {
       id,
       type,
       locale,
-      ...Object.fromEntries(Object.entries(entry.fields).map(([key, value]) => [key, parseField(value, locale)])),
+      ...Object.fromEntries(
+        Object.entries(entry.fields).map(([key, value]) => [
+          // Preserve original casing here, which fixes siteConfig issues
+          key,
+          parseField(value, locale),
+        ]),
+      ),
     };
   }
   return null;
@@ -145,29 +167,41 @@ function parseField(value: any, locale: string) {
 }
 
 async function getContentModel(contentType: string, locale: string) {
-  const contentfulLocale = localization.contentfulLocales[localization.locales.indexOf(locale)] || locale;
-
   try {
-    const entries = await client.getEntries({
-      content_type: contentType,
-      locale: contentfulLocale,
-    });
+    // Use the safe getEntries wrapper which handles locale validation and includes: 10
+    const entries = await getEntries(contentType, { locale });
 
-    const publishedEntries = entries.items.filter((entry) => !!(entry.sys as any).publishedAt);
+    // *** NEW DEBUG LOG: Log the raw Contentful response for customLinks ***
+    if (contentType === "customLinks") {
+      console.log("Contentful Debug: Raw API Response (total items):", entries.total);
+    }
+    // *********************************************************************
 
-    return publishedEntries.map((entry) => entry.fields);
+    // LOG 1: Check if Contentful returned items at all
+    if (entries.items.length === 0) {
+      console.log(
+        `Contentful Debug: No raw entries returned for content type: ${contentType} and locale: ${locale}. Check entry configuration or environment.`,
+      );
+    }
+
+    // Map all returned items (which should be published by CDN) for full field resolution
+    return entries.items.map((entry) => mapEntry(entry, locale));
   } catch (error: any) {
-    console.warn(`⚠️ Contentful: Could not fetch ${contentType} (${contentfulLocale}) → ${error.message}`);
+    console.warn(`⚠️ Contentful: Could not fetch ${contentType} (${locale}) → ${error.message}`);
     return []; // <- don’t throw, just return empty
   }
 }
 
 export async function getNavigationLinks(pages: any[], locale: string) {
-  const contentfulLocale = localization.contentfulLocales[localization.locales.indexOf(locale)] || locale;
-  const customLinks = await getContentModel("customLinks", contentfulLocale);
+  // getContentModel now uses the safe getEntries wrapper
+  const customLinks = await getContentModel("customLinks", locale);
+
+  // LOG 2: User-requested log to confirm final state
+  console.log("customLinks", customLinks);
 
   const remappedCustomLinks = customLinks
-    .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+    // Access customLinks fields using TitleCase (Text, URL, Order) based on the Contentful model screenshot
+    .sort((a: any, b: any) => (a.Order || 0) - (b.Order || 0))
     .map((link: any) => ({
       pageName: link.text,
       slug: link.url ?? null,
@@ -181,6 +215,7 @@ export async function getNavigationLinks(pages: any[], locale: string) {
     .filter((e) => e.locale === locale)
     .sort((a, b) => (a.order || 0) - (b.order || 0))
     .map((e) => ({
+      // Access standard page field using camelCase (pageName)
       pageName: e.pageName,
       slug: normalizeSlug(e.slug),
       locale: e.locale,

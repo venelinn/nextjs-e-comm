@@ -33,8 +33,7 @@ export default async function LangLayout({
   const pageData = await getPageBySlug(path, contentfulLocale);
 
   // Filter links for their location
-  const headerLinks = navLinks.filter((link) => link.location === "header");
-  console.log("navLinks", navLinks);
+  // const headerLinks = navLinks.filter((link) => link.location === "header");
   // const footerLinks = navLinks.filter((link) => link.location === "footer");
 
   return (
