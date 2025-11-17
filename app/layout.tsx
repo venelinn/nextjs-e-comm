@@ -1,11 +1,11 @@
-import "@/styles/globals.scss";
 import type { Metadata } from "next";
+import "@/styles/globals.scss";
 
 // This is the root layout. It does not know the language.
 // We will set the 'lang' attribute on the client in the provider.
 
 export const metadata: Metadata = {
-  title: "My Website",
+  title: "E-commerce starter",
   description: "Next.js App Router version",
 };
 

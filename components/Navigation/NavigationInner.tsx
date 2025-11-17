@@ -1,15 +1,15 @@
-// components/Navigation/NavigationInner.tsx
 "use client";
 
 import cx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { EnvVarWarning } from "@/components/Auth/env-var-warning";
 import { LogoutButton } from "@/components/Auth/logout-button";
 import useNavigationContext from "../../context/navigationContext";
 import useElementSize from "../../hooks/useElementSize";
 import Button from "../Button/Button";
+// ecommerce
+import { CartIcon } from "./cartIcon";
 import { Hamburger } from "./Hamburger";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import styles from "./Navigation.module.scss";
@@ -79,6 +79,7 @@ export function NavigationInner({ pageLocale, siteConfig, links, isNavigationVis
         )}
       </div>
       <div className={styles.navigation__social}>
+        <CartIcon url="/cart" />
         {isLogin ? (
           <LogoutButton />
         ) : (

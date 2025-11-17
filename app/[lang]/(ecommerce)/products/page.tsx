@@ -10,14 +10,19 @@ export default async function ProductsPage({ params }: { params: Promise<{ lang:
   const pageLocale = lang || localization.defaultLocale;
 
   const [products] = await Promise.all([getContentItems("product", pageLocale)]);
-  console.log(products);
 
   return (
     <Section heading={{ heading: "Products", as: "h1", size: "h1" }}>
       <Row cols={3}>
         {products.map((item) => (
           <Cell key={item.id}>
-            <PrimaryCard image={item.media[0]} content={item.description} heading={item.heading} />
+            <PrimaryCard
+              image={item.media[0]}
+              content={item.description}
+              heading={item.heading}
+              price={item.price}
+              id={item.id}
+            />
           </Cell>
         ))}
       </Row>

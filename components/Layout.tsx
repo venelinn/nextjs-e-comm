@@ -34,6 +34,7 @@ type LayoutProps = {
 };
 
 export const Layout = ({ page, siteConfig, navigationLinks, children }: LayoutProps) => {
+  console.log("navigationLinks", navigationLinks);
   // const [state, setState] = useData() as [any, React.Dispatch<any>];
 
   // useEffect(() => {
