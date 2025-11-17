@@ -196,9 +196,6 @@ export async function getNavigationLinks(pages: any[], locale: string) {
   // getContentModel now uses the safe getEntries wrapper
   const customLinks = await getContentModel("customLinks", locale);
 
-  // LOG 2: User-requested log to confirm final state
-  console.log("customLinks", customLinks);
-
   const remappedCustomLinks = customLinks
     // Access customLinks fields using TitleCase (Text, URL, Order) based on the Contentful model screenshot
     .sort((a: any, b: any) => (a.Order || 0) - (b.Order || 0))
