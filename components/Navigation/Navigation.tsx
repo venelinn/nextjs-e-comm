@@ -35,7 +35,6 @@ export default async function Navigation({
 
   const user = data?.claims;
   // const hasEnvVars = getEnvVarsStatus();
-  console.log("siteConfig", siteConfig);
 
   return (
     <header

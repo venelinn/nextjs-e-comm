@@ -46,7 +46,7 @@ export const PrimaryCard = ({ id, heading, content, image, price }: PrimaryCardP
       {image && <Image src={url} alt={image?.alt ?? ""} width={width} height={height} />}
       <div className={styles.card__content}>
         {price ? (
-          <Link href={`/product/${id}`} passHref>
+          <Link href={`/products/${id}`} passHref>
             <Heading as={heading?.as} size={heading?.size} className={styles.module__heading}>
               {heading?.heading}
             </Heading>

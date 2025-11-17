@@ -93,7 +93,6 @@ export async function getSiteConfig(locale: string) {
 
 export async function getMediaItems(locale: string) {
   try {
-    console.log("Fetching media items for locale:", locale);
     const response = await getEntries("media", { locale });
 
     if (!response.items) {
@@ -122,6 +121,17 @@ export async function getContentItems(contentType: string = "media", locale: str
     console.error(`Error fetching items for content type: ${contentType}`, error);
     return [];
   }
+}
+
+// Fetch a single item by ID
+export async function getContentItem(contentType: string, id: string, locale: string) {
+  const res = await client.getEntries({
+    content_type: contentType,
+    "sys.id": id,
+    locale,
+  });
+
+  return res.items[0].fields;
 }
 
 function mapEntry(entry: any, localePassed?: string) {
@@ -170,19 +180,6 @@ async function getContentModel(contentType: string, locale: string) {
   try {
     // Use the safe getEntries wrapper which handles locale validation and includes: 10
     const entries = await getEntries(contentType, { locale });
-
-    // *** NEW DEBUG LOG: Log the raw Contentful response for customLinks ***
-    if (contentType === "customLinks") {
-      console.log("Contentful Debug: Raw API Response (total items):", entries.total);
-    }
-    // *********************************************************************
-
-    // LOG 1: Check if Contentful returned items at all
-    if (entries.items.length === 0) {
-      console.log(
-        `Contentful Debug: No raw entries returned for content type: ${contentType} and locale: ${locale}. Check entry configuration or environment.`,
-      );
-    }
 
     // Map all returned items (which should be published by CDN) for full field resolution
     return entries.items.map((entry) => mapEntry(entry, locale));

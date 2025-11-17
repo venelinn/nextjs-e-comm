@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { LogoutButton } from "@/components/Auth/logout-button";
+// ecommerce
+import { CartIcon } from "@/components/Ecommerce/cartIcon";
 import useNavigationContext from "../../context/navigationContext";
 import useElementSize from "../../hooks/useElementSize";
 import Button from "../Button/Button";
-// ecommerce
-import { CartIcon } from "./cartIcon";
 import { Hamburger } from "./Hamburger";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import styles from "./Navigation.module.scss";
