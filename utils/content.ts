@@ -31,12 +31,6 @@ async function getEntries(
     return { items: [], total: 0, skip: 0, limit: 0, sys: {} as any };
   }
 
-  // *** DEBUG LOG: Show the locale being used for the request ***
-  if (content_type === "customLinks") {
-    console.log(`Contentful Debug: Requesting ${content_type} with determined locale: ${contentfulLocale}`);
-  }
-  // ***************************************************************
-
   const params = { ...queryParams, locale: contentfulLocale };
   // Include 10 to resolve nested references
   return await client.getEntries({ content_type, ...params, include: 10 });
@@ -132,6 +126,21 @@ export async function getContentItem(contentType: string, id: string, locale: st
   });
 
   return res.items[0].fields;
+}
+
+// *** ADDED HELPER FUNCTION: Fetch multiple items by ID ***
+export async function getProductItemsByIds(ids: string[], locale: string) {
+  if (!ids || ids.length === 0) return [];
+
+  // We fetch products based on their system IDs
+  const res = await getEntries("product", {
+    locale,
+    "sys.id[in]": ids.join(","),
+    limit: 100, // Set a reasonable limit for cart items
+  });
+
+  // Map the raw products using mapEntry for full field and asset resolution
+  return res.items.map((entry) => mapEntry(entry));
 }
 
 function mapEntry(entry: any, localePassed?: string) {

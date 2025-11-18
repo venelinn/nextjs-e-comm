@@ -1,7 +1,7 @@
 "use client";
 
 // context/cartContext.tsx
-import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 export type CartItem = {
   id: string;
@@ -42,15 +42,19 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (exists) {
         return prev.map((i) => (i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i));
       }
-      return [...prev, item];
+      // Ensure only id and quantity are stored
+      return [...prev, { id: item.id, quantity: item.quantity }];
     });
   };
 
   const removeItem = (id: string) => setItems((prev) => prev.filter((i) => i.id !== id));
+
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) return removeItem(id);
+
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, quantity } : i)));
   };
+
   const clearCart = () => setItems([]);
 
   const cartCount = useMemo(() => items.reduce((sum, i) => sum + i.quantity, 0), [items]);

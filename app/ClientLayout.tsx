@@ -4,7 +4,6 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { usePathname } from "next/navigation"; // <- App Router hook
 import { useEffect } from "react";
-import { CartProvider } from "@/context/cartContext";
 import { NavigationContextProvider } from "../context/navigationContext";
 import { TransitionContextProvider } from "../context/transitionContext";
 import useNextCssRemovalPrevention from "../hooks/useNextCssRemovalPrevention";
@@ -37,9 +36,7 @@ export function ClientLayout({ children, lang }: { children: React.ReactNode; la
   return (
     <TransitionContextProvider>
       <NavigationContextProvider>
-        <DataProvider>
-          <CartProvider>{children}</CartProvider>
-        </DataProvider>
+        <DataProvider>{children}</DataProvider>
       </NavigationContextProvider>
     </TransitionContextProvider>
   );

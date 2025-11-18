@@ -1,4 +1,4 @@
-import { PrimaryCard } from "@/components/Cards";
+import { ProductCard } from "@/components/Ecommerce/Cards";
 import { Cell, Row } from "@/components/Grid";
 import { Section } from "@/components/Section";
 import { getContentItems } from "@/utils/content";
@@ -16,12 +16,13 @@ export default async function ProductsPage({ params }: { params: Promise<{ lang:
       <Row cols={3}>
         {products.map((item) => (
           <Cell key={item.id}>
-            <PrimaryCard
+            <ProductCard
               image={item.media[0]}
               content={item.description}
               heading={item.heading}
               price={item.price}
               id={item.id}
+              control={false}
             />
           </Cell>
         ))}

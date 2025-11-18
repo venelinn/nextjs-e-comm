@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { CartProvider } from "@/components/Ecommerce/context/cartContext";
 import Footer from "@/components/Footer/Footer";
 import Navigation from "@/components/Navigation/Navigation";
 import { getNavigationLinks, getPageBySlug, getPages, getSiteConfig } from "@/utils/content";
@@ -37,21 +38,23 @@ export default async function LangLayout({
   // const footerLinks = navLinks.filter((link) => link.location === "footer");
 
   return (
-    <ClientLayout lang={lang}>
-      <div className="content-grid">
-        <Navigation
-          links={navLinks}
-          pageLocale={lang}
-          siteConfig={siteConfig}
-          isLogoVisible={pageData?.isLogoVisible}
-          isNavigationVisible={pageData?.isNavigationVisible}
-        />
+    <CartProvider>
+      <ClientLayout lang={lang}>
+        <div className="content-grid">
+          <Navigation
+            links={navLinks}
+            pageLocale={lang}
+            siteConfig={siteConfig}
+            isLogoVisible={pageData?.isLogoVisible}
+            isNavigationVisible={pageData?.isNavigationVisible}
+          />
 
-        {/* The 'children' will be your 'page.tsx' or '[...slug]/page.tsx' */}
-        {children}
+          {/* The 'children' will be your 'page.tsx' or '[...slug]/page.tsx' */}
+          {children}
 
-        <Footer siteConfig={siteConfig} pageLocale={lang} />
-      </div>
-    </ClientLayout>
+          <Footer siteConfig={siteConfig} pageLocale={lang} />
+        </div>
+      </ClientLayout>
+    </CartProvider>
   );
 }

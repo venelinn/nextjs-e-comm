@@ -56,7 +56,7 @@ export default async function Navigation({
           )}
         </div>
 
-        {/* ✅ Client interactivity in a separate component */}
+        {/* ✅ Client interactivity in <a href=""></a> separate component */}
         <NavigationInner
           pageLocale={pageLocale}
           siteConfig={siteConfig}

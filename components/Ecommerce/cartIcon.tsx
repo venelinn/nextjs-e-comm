@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useCart } from "@/components/Ecommerce/context/cartContext";
 import { Icon } from "@/components/Icon";
-import { useCart } from "@/context/cartContext";
 
 export const CartIcon = ({ url }) => {
   const { cartCount } = useCart();
