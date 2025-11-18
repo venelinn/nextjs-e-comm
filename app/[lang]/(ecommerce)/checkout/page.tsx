@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { useCart } from "@/components/Ecommerce/context/cartContext";
+import { useEnrichedCart } from "@/components/Ecommerce/hooks/useEnrichedCart";
 
 interface FormData {
   email: string;
@@ -20,8 +21,10 @@ interface FormErrors {
   postalCode?: string;
 }
 
-const CheckoutPage: React.FC = () => {
+export default function CheckoutPage({ lang }: { lang: string }) {
   const { items, clearCart } = useCart();
+  const { enrichedItems, totalPrice } = useEnrichedCart(lang);
+
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -72,7 +75,6 @@ const CheckoutPage: React.FC = () => {
       }, 2000);
     }
   };
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   if (orderPlaced) {
     return (
@@ -187,12 +189,12 @@ const CheckoutPage: React.FC = () => {
       <div className="md:col-span-1 bg-gray-50 p-6 rounded-lg border">
         <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
         <ul className="divide-y divide-gray-200 my-4">
-          {items.map((item) => (
+          {enrichedItems.map((item) => (
             <li key={item.id} className="flex py-4">
               {/* <img src={item.imageUrl} alt={item.name} className="h-16 w-16 rounded-md object-cover" /> */}
               <div className="ml-4 flex flex-1 justify-between">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-800">{item.name}</h4>
+                  <h4 className="text-sm font-medium text-gray-800">{item.title}</h4>
                   <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
                 <p className="text-sm font-medium text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
@@ -209,6 +211,4 @@ const CheckoutPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default CheckoutPage;
+}
